@@ -48,6 +48,33 @@ public class HousingPricesService {
         }
     }
 
+    public HousingPrices addHousingPrices(HousingPrices housingPrices) {
+        return repository.save(housingPrices);
+    }
+
+    public String deleteHousingPrices(Integer id) {
+        HousingPrices record = repository.findById(id).orElse(null);
+        if(record != null) {
+             repository.delete(record);
+             return "Deleted";
+        }
+        return "Can't delete - not found";
+    }
+
+    public HousingPrices updateHousingPrices(int id, HousingPrices housingPrices) {
+        HousingPrices record = repository.findById(id).orElse(null);
+        if(record == null){
+            return new HousingPrices();
+        }
+        record.setName(housingPrices.getName());
+        record.setTransaction(housingPrices.getTransaction());
+        record.setSurface(housingPrices.getSurface());
+        record.setYear(housingPrices.getYear());
+        record.setPrice(housingPrices.getPrice());
+
+        return repository.save(record);
+    }
+
     public List<HousingPrices> getHousingPricesByName(String name){
         return repository.findByName(name);
     }

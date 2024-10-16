@@ -16,6 +16,11 @@ public class HousingPricesController {
     private final HousingPricesRepository repository;
     private final HousingPricesService service;
 
+    @PostMapping("/")
+    HousingPrices create(@RequestBody HousingPrices housingPrices) {
+        return service.addHousingPrices(housingPrices);
+    }
+
     @GetMapping("/")
     List<HousingPrices> getHousingPrices(@RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "name", required = false) String name,
                                          @RequestParam(value = "transaction", required = false) String transaction, @RequestParam(value = "surface", required = false) String surface){
