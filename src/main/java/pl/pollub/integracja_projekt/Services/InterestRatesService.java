@@ -57,23 +57,44 @@ public class InterestRatesService {
 
     }
     public InterestRates addInterestRates(InterestRates interestRates) {
+        if(interestRates == null
+            || interestRates.getDate() == null
+            || interestRates.getRefRate() == null
+            || interestRates.getPawnRate() == null
+            || interestRates.getDepRate() == null
+            || interestRates.getRedRate() == null
+            || interestRates.getDisRate() == null
+        ){
+            throw new IllegalArgumentException("Data not valid");
+        }
         return repository.save(interestRates);
     }
 
-    public String deleteInterestRates(Integer id){
+    public InterestRates deleteInterestRates(Integer id){
         InterestRates record = repository.findById(id).orElse(null);
         if(record != null){
             repository.delete(record);
-            return "InterestRate deleted";
+            return record;
         }
-        return "Can't delete - interest rate with specified id not found";
+        throw new IllegalArgumentException("Id not found");
     }
 
     public InterestRates updateInterestRates(int id, InterestRates interestRates) {
         InterestRates record = repository.findById(id).orElse(null);
         if(record == null){
-            return new InterestRates();
+            throw new IllegalArgumentException("Id not found");
         }
+        if(interestRates == null
+            || interestRates.getDate() == null
+            || interestRates.getRefRate() == null
+            || interestRates.getPawnRate() == null
+            || interestRates.getDepRate() == null
+            || interestRates.getRedRate() == null
+            || interestRates.getDisRate() == null
+        ){
+            throw new IllegalArgumentException("Data not valid");
+        }
+
         record.setDate(interestRates.getDate());
         record.setRefRate(interestRates.getRefRate());
         record.setPawnRate(interestRates.getPawnRate());

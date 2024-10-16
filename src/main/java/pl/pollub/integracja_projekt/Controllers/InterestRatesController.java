@@ -22,7 +22,7 @@ public class InterestRatesController {
     @GetMapping("/")
     List<InterestRates> getAllRates(@RequestParam(value = "fromDate", required = false) String fromDate, @RequestParam(value = "toDate", required = false) String toDate){
         if(fromDate != null && toDate != null){
-            return service.getInterestRatesByDateRange(fromDate, toDate);
+            return ResponseEntity.ok().body(service.getInterestRatesByDateRange(fromDate, toDate));
         }
         if(fromDate != null){
             return service.getInterestRatesFromDate(fromDate);

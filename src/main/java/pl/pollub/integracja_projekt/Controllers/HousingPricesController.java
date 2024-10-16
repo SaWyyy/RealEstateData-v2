@@ -1,6 +1,8 @@
 package pl.pollub.integracja_projekt.Controllers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.pollub.integracja_projekt.Models.HousingPrices;
 import pl.pollub.integracja_projekt.Repositories.HousingPricesRepository;
@@ -13,7 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 public class HousingPricesController {
 
-    private final HousingPricesRepository repository;
     private final HousingPricesService service;
 
     @PostMapping("/")

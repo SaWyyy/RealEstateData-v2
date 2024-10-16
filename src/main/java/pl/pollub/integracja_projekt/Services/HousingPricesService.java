@@ -9,6 +9,7 @@ import pl.pollub.integracja_projekt.Repositories.HousingPricesRepository;
 import pl.pollub.integracja_projekt.Utils.ExcelReader.ExcelReader;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @Transactional
@@ -49,14 +50,23 @@ public class HousingPricesService {
     }
 
     public HousingPrices addHousingPrices(HousingPrices housingPrices) {
+        if(housingPrices == null
+            || housingPrices.getName() == null
+            || housingPrices.getTransaction() == null
+            || housingPrices.getSurface() == null
+            || housingPrices.getYear() == null
+            || housingPrices.getPrice() == null
+        ){
+            throw new IllegalArgumentException("Error adding housing prices");
+        }
         return repository.save(housingPrices);
     }
 
-    public String deleteHousingPrices(Integer id) {
+    public HousingPrices deleteHousingPrices(Integer id) {
         HousingPrices record = repository.findById(id).orElse(null);
         if(record != null) {
              repository.delete(record);
-             return "Deleted";
+             return record;
         }
         return "Can't delete - not found";
     }
@@ -64,8 +74,19 @@ public class HousingPricesService {
     public HousingPrices updateHousingPrices(int id, HousingPrices housingPrices) {
         HousingPrices record = repository.findById(id).orElse(null);
         if(record == null){
-            return new HousingPrices();
+            throw new NoSuchElementException("Error updating housing prices");
         }
+        if(housingPrices == null
+            || housingPrices.getName() == null
+            || housingPrices.getTransaction() == null
+            || housingPrices.getSurface() == null
+            || housingPrices.getYear() == null
+            || housingPrices.getPrice() == null
+        )
+        {
+            throw new IllegalArgumentException("Error updating housing prices");
+        }
+
         record.setName(housingPrices.getName());
         record.setTransaction(housingPrices.getTransaction());
         record.setSurface(housingPrices.getSurface());
