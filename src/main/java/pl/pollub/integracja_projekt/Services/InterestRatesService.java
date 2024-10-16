@@ -56,6 +56,33 @@ public class InterestRatesService {
         });
 
     }
+    public InterestRates addInterestRates(InterestRates interestRates) {
+        return repository.save(interestRates);
+    }
+
+    public String deleteInterestRates(Integer id){
+        InterestRates record = repository.findById(id).orElse(null);
+        if(record != null){
+            repository.delete(record);
+            return "InterestRate deleted";
+        }
+        return "Can't delete - interest rate with specified id not found";
+    }
+
+    public InterestRates updateInterestRates(int id, InterestRates interestRates) {
+        InterestRates record = repository.findById(id).orElse(null);
+        if(record == null){
+            return new InterestRates();
+        }
+        record.setDate(interestRates.getDate());
+        record.setRefRate(interestRates.getRefRate());
+        record.setPawnRate(interestRates.getPawnRate());
+        record.setDepRate(interestRates.getDepRate());
+        record.setRedRate(interestRates.getRedRate());
+        record.setDisRate(interestRates.getDisRate());
+
+        return repository.save(record);
+    }
 
     public List<InterestRates> getInterestRatesByDateRange(String fromDate, String toDate){
         return repository.findByDateBetween(fromDate, toDate);
