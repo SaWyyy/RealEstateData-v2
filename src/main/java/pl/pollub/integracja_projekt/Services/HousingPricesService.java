@@ -68,7 +68,7 @@ public class HousingPricesService {
              repository.delete(record);
              return record;
         }
-        return "Can't delete - not found";
+        throw new IllegalArgumentException("Error deleting housing prices");
     }
 
     public HousingPrices updateHousingPrices(int id, HousingPrices housingPrices) {
@@ -97,38 +97,65 @@ public class HousingPricesService {
     }
 
     public List<HousingPrices> getHousingPricesByName(String name){
-        return repository.findByName(name);
+        if(name == null){
+            throw new IllegalArgumentException("Name must be specified");
+        }
+            return repository.findByName(name);
     }
 
     public List<HousingPrices> getHousingPricesByTransaction(String transaction){
+        if(transaction == null){
+            throw new IllegalArgumentException("Transaction must be specified");
+        }
         return repository.findByTransaction(transaction);
     }
 
     public List<HousingPrices> getHousingPricesBySurface(String surface){
+        if(surface == null){
+            throw new IllegalArgumentException("Surface muse be specified");
+        }
         return repository.findBySurface(surface);
     }
 
     public List<HousingPrices> getHousingPricesByYear(Integer year){
+        if(year <= 1000){
+            throw new IllegalArgumentException("Year cant be less than  or equal 0");
+        }
         return repository.findByYear(year);
     }
 
     public List<HousingPrices> getHousingPricesByYearNameTransaction(Integer year, String name, String transaction){
+        if(year == null || name == null || transaction == null){
+            throw new IllegalArgumentException("Year, name and transaction must be specified");
+        }
         return repository.findByYearAndNameAndTransaction(year, name, transaction);
     }
 
     public List<HousingPrices> getHousingPricesByNameTransactionSurface(String name, String transaction, String surface){
+        if(name == null || transaction == null || surface == null){
+            throw new IllegalArgumentException("Name, transaction and surface must be specified");
+        }
         return repository.findByNameAndTransactionAndSurface(name, transaction, surface);
     }
 
     public List<HousingPrices> getHousingPrices(Integer year, String name, String transaction, String surface){
+        if(year == null || name == null || transaction == null || surface == null){
+            throw new IllegalArgumentException("Year, name, transaction and surface must be specified");
+        }
         return repository.findByYearAndNameAndTransactionAndSurface(year, name, transaction, surface);
     }
 
     public List<HousingPrices> getHousingPricesByYearSurface(Integer year, String surface){
+        if(year == null || year == null){
+            throw new IllegalArgumentException("Year must be specified");
+        }
         return repository.findByYearAndSurface(year, surface);
     }
 
     public List<HousingPrices> getHousingPricesByNameTransaction(String name, String transaction){
+        if(name == null || transaction == null){
+            throw new IllegalArgumentException("Name and transaction must be specified");
+        }
         return repository.findByNameAndTransaction(name, transaction);
     }
 }

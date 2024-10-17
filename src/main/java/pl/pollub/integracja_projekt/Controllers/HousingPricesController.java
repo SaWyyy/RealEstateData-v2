@@ -1,5 +1,6 @@
 package pl.pollub.integracja_projekt.Controllers;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -18,33 +19,58 @@ public class HousingPricesController {
     private final HousingPricesService service;
 
     @PostMapping("/")
-    HousingPrices create(@RequestBody HousingPrices housingPrices) {
-        return service.addHousingPrices(housingPrices);
+    ResponseEntity<HousingPrices> create(@RequestBody HousingPrices housingPrices) {
+        try{
+            return ResponseEntity.ok().body(service.addHousingPrices(housingPrices));
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @GetMapping("/")
-    List<HousingPrices> getHousingPrices(@RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "name", required = false) String name,
+    ResponseEntity<List<HousingPrices>> getHousingPrices(@RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "name", required = false) String name,
                                          @RequestParam(value = "transaction", required = false) String transaction, @RequestParam(value = "surface", required = false) String surface){
-        if(year == null && surface == null && transaction == null){
-            return service.getHousingPricesByName(name);
+        try{
+            if(year == null && surface == null && transaction == null){
+                return ResponseEntity.ok().body(service.getHousingPricesByName(name));
+            }
+            if(transaction == null && name == null){
+                return ResponseEntity.ok().body(service.getHousingPricesByYearSurface(year, surface));
+            }
+            if(year == null && surface == null){
+                return ResponseEntity.ok().body(service.getHousingPricesByNameTransaction(name, transaction));
+            }
+            if(surface == null){
+                return ResponseEntity.ok().body(service.getHousingPricesByYearNameTransaction(year, name, transaction));
+            }
+            if(year == null){
+                return  ResponseEntity.ok().body(service.getHousingPricesByNameTransactionSurface(name, transaction, surface));
+            }
+
+            return ResponseEntity.ok(service.getHousingPrices(year, name, transaction, surface));
+        }
+        catch(Exception e){
+            return ResponseEntity.badRequest().body(null);
         }
 
-        if(transaction == null && name == null){
-            return service.getHousingPricesByYearSurface(year, surface);
-        }
+    }
 
-        if(year == null && surface == null){
-            return service.getHousingPricesByNameTransaction(name, transaction);
+    @DeleteMapping("/{id}")
+    ResponseEntity<HousingPrices> delete(@PathVariable Integer id){
+        try{
+            return ResponseEntity.ok().body(service.deleteHousingPrices(id));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(null);
         }
+    }
 
-        if(surface == null){
-            return service.getHousingPricesByYearNameTransaction(year, name, transaction);
+    @PutMapping("/{id}")
+    ResponseEntity<HousingPrices> update(@PathVariable Integer id, @RequestBody HousingPrices housingPrices){
+        try{
+           return ResponseEntity.ok().body(service.updateHousingPrices(id, housingPrices));
+        }catch(Exception e) {
+            return ResponseEntity.badRequest().body(null);
         }
-
-        if(year == null){
-            return  service.getHousingPricesByNameTransactionSurface(name, transaction, surface);
-        }
-
-        return service.getHousingPrices(year, name, transaction, surface);
     }
 }

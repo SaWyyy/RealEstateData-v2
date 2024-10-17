@@ -107,10 +107,16 @@ public class InterestRatesService {
     }
 
     public List<InterestRates> getInterestRatesByDateRange(String fromDate, String toDate){
+        if(fromDate == null || toDate == null){
+            throw new IllegalArgumentException("You need to specify time period");
+        }
         return repository.findByDateBetween(fromDate, toDate);
     }
 
     public List<InterestRates> getInterestRatesFromDate(String fromDate){
+        if(fromDate == null){
+            throw new IllegalArgumentException("You need to specify start date");
+        }
         return repository.findByDateAfter(fromDate);
     }
 }

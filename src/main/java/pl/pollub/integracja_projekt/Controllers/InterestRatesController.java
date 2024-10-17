@@ -20,14 +20,40 @@ public class InterestRatesController {
     // localhost:8080/?fromDate=2020-03-12
 
     @GetMapping("/")
-    List<InterestRates> getAllRates(@RequestParam(value = "fromDate", required = false) String fromDate, @RequestParam(value = "toDate", required = false) String toDate){
+    ResponseEntity<List<InterestRates>> getAllRates(@RequestParam(value = "fromDate", required = false) String fromDate, @RequestParam(value = "toDate", required = false) String toDate){
         if(fromDate != null && toDate != null){
             return ResponseEntity.ok().body(service.getInterestRatesByDateRange(fromDate, toDate));
         }
         if(fromDate != null){
-            return service.getInterestRatesFromDate(fromDate);
+            return ResponseEntity.ok(service.getInterestRatesFromDate(fromDate));
         }
-        return repository.findAll();
+        return ResponseEntity.ok(repository.findAll());
     }
 
+    @PostMapping("/")
+    ResponseEntity<InterestRates> addInterestRates(@RequestBody InterestRates interestRates){
+        try{
+            return ResponseEntity.ok().body(service.addInterestRates(interestRates));
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<InterestRates> deleteInterestRates(@PathVariable int id){
+        try{
+            return ResponseEntity.ok().body(service.deleteInterestRates(id));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @PutMapping("/{id}")
+    ResponseEntity<InterestRates> updateInterestRates(@PathVariable int id, @RequestBody InterestRates interestRates){
+        try{
+            return ResponseEntity.ok().body(service.updateInterestRates(id, interestRates));
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 }
