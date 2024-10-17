@@ -10,6 +10,7 @@ import pl.pollub.integracja_projekt.Utils.XmlReader.InterestRatesDTO;
 import pl.pollub.integracja_projekt.Utils.XmlReader.XmlReader;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @Transactional
@@ -82,7 +83,7 @@ public class InterestRatesService {
     public InterestRates updateInterestRates(int id, InterestRates interestRates) {
         InterestRates record = repository.findById(id).orElse(null);
         if(record == null){
-            throw new IllegalArgumentException("Id not found");
+            throw new NoSuchElementException("Id not found");
         }
         if(interestRates == null
             || interestRates.getDate() == null

@@ -88,9 +88,9 @@ public class HousingPricesControllerTests {
     public void HousingPricesController_getHousingPrices_ShouldReturnBadRequest() throws Exception{
         List<HousingPrices> housingPricesList = new ArrayList<>();
 
-        when(housingPricesService.getHousingPricesByYear(0)).thenThrow(new IllegalArgumentException("Year cant be less than  or euqal 0"));
+        when(housingPricesService.getHousingPricesByName("test")).thenThrow(new IllegalArgumentException("Year cant be less than  or euqal 0"));
 
-        mockMvc.perform(get("/api/housingPrices/?year=0"))
+        mockMvc.perform(get("/api/housingPrices/?name=test"))
                 .andExpect(status().isBadRequest());
     }
 
