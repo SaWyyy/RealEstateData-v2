@@ -32,21 +32,30 @@ public class HousingPricesController {
     ResponseEntity<List<HousingPrices>> getHousingPrices(@RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "name", required = false) String name,
                                          @RequestParam(value = "transaction", required = false) String transaction, @RequestParam(value = "surface", required = false) String surface){
         try{
-            if(year == null && surface == null && transaction == null){
+            if(year == null && surface == null && transaction == null)
                 return ResponseEntity.ok().body(service.getHousingPricesByName(name));
-            }
-            if(transaction == null && name == null){
+
+            if(year == null && surface == null && name == null)
+                return ResponseEntity.ok().body(service.getHousingPricesByTransaction(transaction));
+
+            if(year == null && transaction == null && name == null)
+                return ResponseEntity.ok().body(service.getHousingPricesBySurface(surface));
+
+            if(surface == null && transaction == null && name == null)
+                return ResponseEntity.ok().body(service.getHousingPricesByYear(year));
+
+            if(transaction == null && name == null)
                 return ResponseEntity.ok().body(service.getHousingPricesByYearSurface(year, surface));
-            }
-            if(year == null && surface == null){
+
+            if(year == null && surface == null)
                 return ResponseEntity.ok().body(service.getHousingPricesByNameTransaction(name, transaction));
-            }
-            if(surface == null){
+
+            if(surface == null)
                 return ResponseEntity.ok().body(service.getHousingPricesByYearNameTransaction(year, name, transaction));
-            }
-            if(year == null){
+
+            if(year == null)
                 return  ResponseEntity.ok().body(service.getHousingPricesByNameTransactionSurface(name, transaction, surface));
-            }
+
 
             return ResponseEntity.ok(service.getHousingPrices(year, name, transaction, surface));
         }
