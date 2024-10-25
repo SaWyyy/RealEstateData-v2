@@ -1,6 +1,9 @@
 package pl.pollub.integracja_projekt.Services;
 
 import jakarta.annotation.PostConstruct;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +11,7 @@ import pl.pollub.integracja_projekt.Models.HousingPrices;
 import pl.pollub.integracja_projekt.Repositories.HousingPricesRepository;
 import pl.pollub.integracja_projekt.Utils.ExcelReader.ExcelReader;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -157,5 +161,23 @@ public class HousingPricesService {
             throw new IllegalArgumentException("Name and transaction must be specified");
         }
         return repository.findByNameAndTransaction(name, transaction);
+    }
+
+    public List<HousingPrices> importData(JSONArray jsonArray) throws JSONException {
+        List<HousingPrices> list = new ArrayList<HousingPrices>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject housingPrice = jsonArray.getJSONObject(i);
+
+            Integer id = housingPrice.getInt("id");
+            String name = housingPrice.getString("name");
+            String transaction = housingPrice.getString("transaction");
+            String surface = housingPrice.getString("surface");
+            Integer year = housingPrice.getInt("year");
+            Integer price = housingPrice.getInt("price");
+            HousingPrices housing = new HousingPrices(id, name, transaction, surface, year, price);
+            list.add(housing);
+        }
+        repository.saveAll(list);
+        return list;
     }
 }

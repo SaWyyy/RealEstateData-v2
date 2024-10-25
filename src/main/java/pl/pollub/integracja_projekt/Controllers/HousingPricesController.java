@@ -2,6 +2,7 @@ package pl.pollub.integracja_projekt.Controllers;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.json.JSONArray;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -79,6 +80,16 @@ public class HousingPricesController {
         try{
            return ResponseEntity.ok().body(service.updateHousingPrices(id, housingPrices));
         }catch(Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @PostMapping("/import")
+    ResponseEntity<List<HousingPrices>> importToDb(JSONArray jsonArray){
+        try{
+            return ResponseEntity.ok().body(service.importData(jsonArray));
+        }
+        catch(Exception e){
             return ResponseEntity.badRequest().body(null);
         }
     }
