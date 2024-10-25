@@ -164,6 +164,7 @@ public class HousingPricesService {
     }
 
     public List<HousingPrices> importData(JSONArray jsonArray) throws JSONException {
+        System.out.println(jsonArray);
         repository.deleteAll();
         List<HousingPrices> list = new ArrayList<HousingPrices>();
         for (int i = 0; i < jsonArray.length(); i++) {
